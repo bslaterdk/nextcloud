@@ -1,4 +1,4 @@
-ARG NEXTCLOUD_VERSION=22.1.1
+ARG NEXTCLOUD_VERSION=22.2.3
 
 FROM nextcloud:${NEXTCLOUD_VERSION}-apache
 
@@ -15,13 +15,17 @@ RUN apt-get update -qq && \
       smbclient \
       libsmbclient-dev \
       clamdscan \
-      ghostscript && \
+      ghostscript \
+#      unrar \
+      p7zip \
+      p7zip-full && \
     apt-get purge -yqq && \
     sed -i -e 's/MaxRequestWorkers\s*150/MaxRequestWorkers 25/' /etc/apache2/mods-available/mpm_prefork.conf && \
     sed -i -e 's:<policy domain="coder" rights="none" pattern="PDF" />:<policy domain="coder" rights="read | write" pattern="PDF" />:' /etc/ImageMagick-6/policy.xml && \
     chsh www-data -s /bin/bash && \
     apt-get clean
 
+RUN pecl -v install rar
 RUN pecl install inotify && docker-php-ext-enable inotify
 RUN pecl install smbclient && docker-php-ext-enable smbclient
 
