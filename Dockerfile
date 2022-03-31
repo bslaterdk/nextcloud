@@ -1,4 +1,4 @@
-ARG NEXTCLOUD_VERSION=22.2.3
+ARG NEXTCLOUD_VERSION=23.0.3
 
 FROM nextcloud:${NEXTCLOUD_VERSION}-apache
 
@@ -9,6 +9,17 @@ RUN apt-get update -qq && \
     apt-get install -yqq --no-install-recommends \
       vim \
       nano \
+      ffmpeg \
+      supervisor \
+      python3-numpy \ 
+      python3-willow \
+      python3-asn1crypto \
+      python3-cffi \
+      python3-cffi-backend \
+      python3-scipy \
+      python3-nacl \
+      python3-cryptography \
+      python3-pip \
       libmagickcore-6.q16-6-extra \
       libmagickwand-dev \
       less \
@@ -28,6 +39,9 @@ RUN apt-get update -qq && \
 RUN pecl -v install rar
 RUN pecl install inotify && docker-php-ext-enable inotify
 RUN pecl install smbclient && docker-php-ext-enable smbclient
+RUN python3 -m pip install -U pip
+RUN python3 -m pip install pillow_heif
+RUN python3 -m pip install pywavelets
 
 ARG SCANNER_TOKEN
 
